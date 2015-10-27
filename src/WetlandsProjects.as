@@ -334,115 +334,44 @@ import spark.components.Group;
 	//Handles click requests for map layer info
 	private function onMapClick(event:MapMouseEvent):void
 	{
-		if (measureToolActivated) {
-			return;
-		}
-		
-		var level:Number = map.level;
 		
 		wetQueryGraphicsLayer.clear();
 		wetInfo.clear();
 		PopUpManager.removePopUp(_queryWindow);
 		
-		/*if (((level > 11 && wetlands.visible) || (level > 11 && riparian.visible) || level > 11 && historicQuad.visible) && watershedsForDownload.visible == false) {
-			
-			//wetland identify task
-			var identifyParameters:IdentifyParameters = new IdentifyParameters();
-			identifyParameters.returnGeometry = true;
-			identifyParameters.tolerance = 0;
-			identifyParameters.width = map.width;
-			identifyParameters.height = map.height;
-			identifyParameters.geometry = event.mapPoint;
-			identifyParameters.layerOption = "all";
+		//Projects identify task
+		var identifyParameters:IdentifyParameters = new IdentifyParameters();
+		identifyParameters.returnGeometry = true;
+		identifyParameters.tolerance = 0;
+		identifyParameters.width = map.width;
+		identifyParameters.height = map.height;
+		identifyParameters.geometry = event.mapPoint;
+		identifyParameters.layerOption = "all";
+		//identifyParameters.layerIds = [0,1];
+		identifyParameters.mapExtent = map.extent;
+		identifyParameters.spatialReference = map.spatialReference;										
+		
+		var identifyTask:IdentifyTask = new IdentifyTask();
+		identifyTask.showBusyCursor = true;
+		identifyTask.proxyURL = resourceManager.getString('urls', 'proxyUrl');
+		identifyTask.url = resourceManager.getString('urls', 'projectsUrl');
+		
+		identifyPoint = event.mapPoint;
+		Xpt = identifyPoint.x;
+		Ypt = identifyPoint.y;
+		queryX = event.stageX;
+		queryY = event.stageY;
+		
+		if (activeProjects.visible && recentProjects.visible) {
 			identifyParameters.layerIds = [0,1];
-			identifyParameters.mapExtent = map.extent;
-			identifyParameters.spatialReference = map.spatialReference;										
-			
-			var identifyTask:IdentifyTask = new IdentifyTask();
-			identifyTask.showBusyCursor = true;
-			identifyTask.proxyURL = resourceManager.getString('urls', 'proxyUrl');
-			identifyTask.url = resourceManager.getString('urls', 'wetlandsUrl');
-			
-			//Riparian Identify task
-			var riparianIdentifyParameters:IdentifyParameters = new IdentifyParameters();
-			riparianIdentifyParameters.returnGeometry = true;
-			riparianIdentifyParameters.tolerance = 0;
-			riparianIdentifyParameters.width = map.width;
-			riparianIdentifyParameters.height = map.height;
-			riparianIdentifyParameters.geometry = event.mapPoint;
-			riparianIdentifyParameters.layerOption = IdentifyParameters.LAYER_OPTION_ALL;
-			riparianIdentifyParameters.mapExtent = map.extent;
-			riparianIdentifyParameters.spatialReference = map.spatialReference;	
-			riparianIdentifyParameters.layerIds = [0,1];
-			
-			var riparianIdentifyTask:IdentifyTask = new IdentifyTask();
-			riparianIdentifyTask.showBusyCursor = true;
-			riparianIdentifyTask.proxyURL = resourceManager.getString('urls', 'proxyUrl');
-			riparianIdentifyTask.url = resourceManager.getString('urls', 'riparianUrl');
-			
-			//Historic Wetland Identify task
-			var historicIdentifyParameters:IdentifyParameters = new IdentifyParameters();
-			historicIdentifyParameters.returnGeometry = true;
-			historicIdentifyParameters.tolerance = 0;
-			historicIdentifyParameters.width = map.width;
-			historicIdentifyParameters.height = map.height;
-			historicIdentifyParameters.geometry = event.mapPoint;
-			historicIdentifyParameters.layerOption = IdentifyParameters.LAYER_OPTION_ALL;
-			historicIdentifyParameters.mapExtent = map.extent;
-			historicIdentifyParameters.spatialReference = map.spatialReference;	
-			historicIdentifyParameters.layerIds = [0,1];
-			
-			var historicIdentifyTask:IdentifyTask = new IdentifyTask();
-			historicIdentifyTask.showBusyCursor = true;
-			historicIdentifyTask.proxyURL = resourceManager.getString('urls', 'proxyUrl');
-			historicIdentifyTask.url = resourceManager.getString('urls', 'historicUrl');
-			
-			
-			identifyPoint = event.mapPoint;
-			Xpt = identifyPoint.x;
-			Ypt = identifyPoint.y;
-			queryX = event.stageX;
-			queryY = event.stageY;
-			
-			
-			//All wetlands
-			identifyParameters.layerIds = [0,1];
-			
-			
-			if (wetlands.visible) {
-				identifyTask.execute( identifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'wetland'}])) );
-			}
-			
-			if (riparian.visible) {
-				riparianIdentifyTask.execute( riparianIdentifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'riparian'}])) );
-			}
-			
-			if (historicQuad.visible) {
-				historicIdentifyTask.execute( historicIdentifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'historic'}])) );
-			}
-			
-		} else if (watershedsForDownload.visible == true) {
-			//watershed identify task
-			watershedGraphicsLayer.clear();
-			var identifyParameters:IdentifyParameters = new IdentifyParameters();
-			identifyParameters.returnGeometry = true;
-			identifyParameters.tolerance = 0;
-			identifyParameters.width = map.width;
-			identifyParameters.height = map.height;
-			identifyParameters.geometry = event.mapPoint;
-			identifyParameters.layerOption = IdentifyParameters.LAYER_OPTION_TOP;
-			identifyParameters.mapExtent = map.extent;
-			identifyParameters.spatialReference = map.spatialReference;										
-			
-			var identifyTask:IdentifyTask = new IdentifyTask();
-			identifyTask.showBusyCursor = true;
-			identifyTask.proxyURL = resourceManager.getString('urls', 'proxyUrl');
-			identifyTask.url = resourceManager.getString('urls', 'huc8Url');
-			
-			identifyTask.execute( identifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'watershed'}])) );
-		} else {
-			return;
-		}*/
+			identifyTask.execute( identifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'bothProjects'}])) );
+		} else if (activeProjects.visible) {
+			identifyParameters.layerIds = [0];
+			identifyTask.execute( identifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'activeProjects'}])) );
+		} else if (recentProjects.visible) {
+			identifyParameters.layerIds = [1];
+			identifyTask.execute( identifyParameters, new AsyncResponder(infoResult, infoFault, new ArrayCollection([{type: 'recentProjects'}])) );
+		}
 		
 	}
 
@@ -455,309 +384,23 @@ import spark.components.Group;
 			var lng:Number = Number(configObjects.getItemAt(0).lng);
 		}
 		
-		//identifyPoint = event.mapPoint;
-		
-		if (type == 'wetland' && resultSet && resultSet.length > 0) {
+		if (resultSet.length > 0) {
 			
-			var i:int;
-			var dataObj:Object = new Object();
 			var wetGraphic:Graphic;
-			
-			for (i=0;i<resultSet.length;i++) {
-				if (resultSet[i].layerName.search("Metadata") != -1) {
-					if (resultSet[i].feature.attributes.STATUS == "Scan") {
-						var scanDataObj:Object = resultSet[i].feature.attributes;
-						//var metaGraphic:Graphic = resultSet[i].feature;
-						
-						quadQuery.geometry = FlexGlobals.topLevelApplication.identifyPoint;
-						quadTask.execute(quadQuery, new AsyncResponder(quadResult, quadFault));
-						
-						function quadResult(featureSet:FeatureSet, token:Object = null):void
-						{
-							if (featureSet.features.length != 0) {
-								var quadAttr:Object = new ObjectProxy(featureSet.features[0].attributes);
-								if (quadAttr.QUAD_NAME != null) {
-									scanDataObj.quad24k = quadAttr.QUAD_NAME;
-								} else if (quadAttr.NAME != null) {
-									scanDataObj.quad63k = quadAttr.NAME;
-								} 
-							}
-							
-							quadTask2.execute(quadQuery, new AsyncResponder(quadResult2, quadFault));
-							function quadResult2(featureSet:FeatureSet, token:Object = null):void
-							{
-								if (featureSet.features.length != 0) {
-									var quadAttr:Object = new ObjectProxy(featureSet.features[0].attributes);
-									scanDataObj.quad100k = quadAttr.QUAD_NAME;
-									
-									ptGraphic = new Graphic(identifyPoint, scanSym);
-									ptGraphic.attributes = scanDataObj;
-									
-									wetInfo.add(ptGraphic);
-									return;
-								}
-								
-							}
-							
-						}
-						
-						function quadFault(info:Object, token:Object = null):void
-						{
-							Alert.show("quadFault: " + info.toString());
-						}
-						
-						
-					} else {
-						if (dataObj == null) {
-							dataObj = resultSet[i].feature.attributes;
-						} else {
-							dataObj.STATUS = resultSet[i].feature.attributes.STATUS;
-							dataObj.IMAGE_DATE = resultSet[i].feature.attributes.IMAGE_DATE;
-							dataObj.SUPPMAPINFO = resultSet[i].feature.attributes.SUPPMAPINFO;
-							dataObj.EMULSION = resultSet[i].feature.attributes.EMULSION;
-							dataObj.IMAGE_SCALE = resultSet[i].feature.attributes.IMAGE_SCALE;
-							dataObj.SOURCE_TYPE = resultSet[i].feature.attributes.SOURCE_TYPE;
-						}
-					}
-				} else if (resultSet[i].value != "NoData"){
-					if (dataObj == null) {
-						dataObj = resultSet[i].feature.attributes;
-						if (resultSet[i].layerName == "Wetlands") {
-							wetGraphic = resultSet[i].feature;
-							wetGraphic.symbol = aQuerySym;
-							wetQueryGraphicsLayer.add(wetGraphic);
-						}
-					} else {
-						dataObj.ATTRIBUTE = resultSet[i].feature.attributes.ATTRIBUTE;
-						dataObj.WETLAND_TYPE = resultSet[i].feature.attributes.WETLAND_TYPE;
-						dataObj.ACRES = resultSet[i].feature.attributes.ACRES;
-						if (resultSet[i].layerName == "Wetlands") {
-							wetGraphic = resultSet[i].feature;
-							wetGraphic.symbol = aQuerySym;
-							wetQueryGraphicsLayer.add(wetGraphic);
-						}
-					}
-				}
-				
-			}
-			//else if (resultSet[i].value != "NoData")
-			if (wetGraphic != null) {
-				_queryWindow = PopUpManager.createPopUp(map, WetlandDataWindow, false) as WiMInfoWindow;
-				_queryWindow.data = dataObj;
-				_queryWindow.setStyle("skinClass", FeatureDataWindowSkin);
-				_queryWindow.x = queryX;
-				_queryWindow.y = queryY;
-				_queryWindow.addEventListener(CloseEvent.CLOSE, closePopUp);
-			}
-		} else if (type == 'wetlandOnLoad' && resultSet && resultSet.length > 0) {
-			
-			var i:int;
-			var dataObj:Object = new Object();
-			var wetGraphic:Graphic;
-			
-			identifyPoint = WebMercatorUtil.geographicToWebMercator(new MapPoint(lng,lat)) as MapPoint;
-			
-			for (i=0;i<resultSet.length;i++) {
-				if (resultSet[i].layerName.search("Metadata") != -1) {
-					if (resultSet[i].feature.attributes.STATUS == "Scan") {
-						var scanDataObj:Object = resultSet[i].feature.attributes;
-						//var metaGraphic:Graphic = resultSet[i].feature;
-						
-						quadQuery.geometry = new MapPoint(lng,lat);
-						quadTask.execute(quadQuery, new AsyncResponder(onLoadQuadResult, onLoadquadFault, new ArrayCollection([{type: 'quadOnLoad'}])));
-						
-						function onLoadQuadResult(featureSet:FeatureSet, token:Object = null):void
-						{
-							if (featureSet.features.length != 0) {
-								var quadAttr:Object = new ObjectProxy(featureSet.features[0].attributes);
-								if (quadAttr.QUAD_NAME != null) {
-									scanDataObj.quad24k = quadAttr.QUAD_NAME;
-								} else if (quadAttr.NAME != null) {
-									scanDataObj.quad63k = quadAttr.NAME;
-								} 
-							}
-							
-							quadTask2.execute(quadQuery, new AsyncResponder(quadResult2, onLoadquadFault));
-							function quadResult2(featureSet:FeatureSet, token:Object = null):void
-							{
-								if (featureSet.features.length != 0) {
-									var quadAttr:Object = new ObjectProxy(featureSet.features[0].attributes);
-									scanDataObj.quad100k = quadAttr.QUAD_NAME;
-									
-									ptGraphic = new Graphic(identifyPoint, scanSym);
-									ptGraphic.attributes = scanDataObj;
-									
-									wetInfo.add(ptGraphic);
-									return;
-								}
-								
-							}
-							
-						}
-						
-						function onLoadquadFault(info:Object, token:Object = null):void
-						{
-							Alert.show("type: " + token.getItemAt(0).type + "/n" + info.toString());
-							Alert.show('onloadquadfault');
-						}
-						
-						
-					} else {
-						if (dataObj == null) {
-							dataObj = resultSet[i].feature.attributes;
-						} else {
-							dataObj.STATUS = resultSet[i].feature.attributes.STATUS;
-							dataObj.IMAGE_DATE = resultSet[i].feature.attributes.IMAGE_DATE;
-							dataObj.SUPPMAPINFO = resultSet[i].feature.attributes.SUPPMAPINFO;
-							dataObj.EMULSION = resultSet[i].feature.attributes.EMULSION;
-							dataObj.IMAGE_SCALE = resultSet[i].feature.attributes.IMAGE_SCALE;
-							dataObj.SOURCE_TYPE = resultSet[i].feature.attributes.SOURCE_TYPE;
-						}
-					}
-				} else {
-					if (dataObj == null) {
-						dataObj = resultSet[i].feature.attributes;
-						if (resultSet[i].layerName.search("Wetlands") != -1) {
-							wetGraphic = resultSet[i].feature;
-							wetGraphic.symbol = aQuerySym;
-							wetQueryGraphicsLayer.add(wetGraphic);
-						}
-					} else {
-						dataObj.ATTRIBUTE = resultSet[i].feature.attributes.ATTRIBUTE;
-						dataObj.WETLAND_TYPE = resultSet[i].feature.attributes.WETLAND_TYPE;
-						dataObj.ACRES = resultSet[i].feature.attributes.ACRES;
-						if (resultSet[i].layerName.search("Wetlands") != -1) {
-							wetGraphic = resultSet[i].feature;
-							wetGraphic.symbol = aQuerySym;
-							wetQueryGraphicsLayer.add(wetGraphic);
-						}
-					}
-				}
-				
-			}
+			wetGraphic = resultSet[0].feature;
+			wetGraphic.symbol = aQuerySym;
+			wetQueryGraphicsLayer.add(wetGraphic);
 			
 			if (wetGraphic != null) {
-				_queryWindow = PopUpManager.createPopUp(map, WetlandDataWindow, false) as WiMInfoWindow;
-				_queryWindow.data = dataObj;
-				_queryWindow.setStyle("skinClass", FeatureDataWindowSkin);
-				_queryWindow.x = map.width/2;
-				_queryWindow.y = map.height/2;
-				_queryWindow.addEventListener(CloseEvent.CLOSE, closePopUp);
-			}
-		} else if (type == 'riparian' && resultSet && resultSet.length > 0) {
-			var i:int;
-			var dataObj:Object = new Object();
-			var ripGraphic:Graphic;
-			
-			for (i=0;i<resultSet.length;i++) {
-				if (resultSet[i].layerName.search("Mapping Areas") != -1) {
-					if (dataObj == null) {
-						dataObj = resultSet[i].feature.attributes;
-					} else {
-						dataObj.STATUS = resultSet[i].feature.attributes.STATUS;
-						dataObj.IMAGE_DATE = resultSet[i].feature.attributes.IMAGE_DATE;
-						dataObj.SUPPMAPINFO = resultSet[i].feature.attributes.SUPPMAPINFO;
-						dataObj.EMULSION = resultSet[i].feature.attributes.EMULSION;
-						dataObj.IMAGE_SCALE = resultSet[i].feature.attributes.IMAGE_SCALE;
-					}
-				} else {
-					if (dataObj == null) {
-						dataObj = resultSet[i].feature.attributes;
-						ripGraphic = resultSet[i].feature;
-						ripGraphic.symbol = aQuerySym;
-						wetQueryGraphicsLayer.add(ripGraphic);
-					} else {
-						dataObj.ATTRIBUTE = resultSet[i].feature.attributes.ATTRIBUTE;
-						dataObj.WETLAND_TYPE = resultSet[i].feature.attributes.WETLAND_TYPE;
-						dataObj.ACRES = resultSet[i].feature.attributes.ACRES;
-						ripGraphic = resultSet[i].feature;
-						ripGraphic.symbol = aQuerySym;
-						wetQueryGraphicsLayer.add(ripGraphic);
-					}
-				}
-				
-			}
-			
-			if (ripGraphic != null) {
-				_queryWindow = PopUpManager.createPopUp(map, RiparianDataWindow, false) as WiMInfoWindow;
-				_queryWindow.data = dataObj;
+				_queryWindow = PopUpManager.createPopUp(map, ProjectWindow, false) as WiMInfoWindow;
+				_queryWindow.data = resultSet[0].feature.attributes;
 				_queryWindow.setStyle("skinClass", FeatureDataWindowSkin);
 				_queryWindow.x = queryX;
 				_queryWindow.y = queryY;
 				_queryWindow.addEventListener(CloseEvent.CLOSE, closePopUp);
-			}
-		} else if (type == 'historic' && resultSet && resultSet.length > 0) {
-			var i:int;
-			var dataObj:Object = new Object();
-			var histGraphic:Graphic;
-			
-			for (i=0;i<resultSet.length;i++) {
-				if (resultSet[i].layerName.search("Metadata") != -1) {
-					if (dataObj == null) {
-						dataObj = resultSet[i].feature.attributes;
-					} else {
-						dataObj.SUPPMAPINFO = resultSet[i].feature.attributes.SUPPMAPINFO;
-						dataObj.FGDC_METADATA = resultSet[i].feature.attributes.FGDC_METADATA;
-					}
-				} else {
-					if (dataObj == null) {
-						dataObj = resultSet[i].feature.attributes;
-						histGraphic = resultSet[i].feature;
-						histGraphic.symbol = aQuerySym;
-						wetQueryGraphicsLayer.add(histGraphic);
-					} else {
-						dataObj.ATTRIBUTE = resultSet[i].feature.attributes.ATTRIBUTE;
-						dataObj.WETLAND_TYPE = resultSet[i].feature.attributes.WETLAND_TYPE;
-						dataObj.ACRES = resultSet[i].feature.attributes.ACRES;
-						histGraphic = resultSet[i].feature;
-						histGraphic.symbol = aQuerySym;
-						wetQueryGraphicsLayer.add(histGraphic);
-					}
-				}
-				
-			}
-			
-			if (histGraphic != null) {
-				_queryWindow = PopUpManager.createPopUp(map, HistoricDataWindow, false) as WiMInfoWindow;
-				_queryWindow.data = dataObj;
-				_queryWindow.setStyle("skinClass", FeatureDataWindowSkin);
-				_queryWindow.x = queryX;
-				_queryWindow.y = queryY;
-				_queryWindow.addEventListener(CloseEvent.CLOSE, closePopUp);
-			}
-		} else if (type == 'watershed' && resultSet && resultSet.length > 0) {
-			var i:int;
-			var dataObj:Object = new Object();
-			var watershedGraphic:Graphic;
-			
-			for (i=0;i<resultSet.length;i++) {
-				if (resultSet[i].layerName.search("HU8") != -1) {
-					dataObj = resultSet[i].feature.attributes;
-					HUCNumber = dataObj.HUC8;
-					HUCName = dataObj.Name;
-					watershedGraphic = resultSet[i].feature;
-					watershedGraphic.symbol = aQuerySym;
-					watershedGraphic.toolTip = dataObj.Name + "\nHUC " + dataObj.HUC8;
-					watershedGraphic.alpha = 0;
-					watershedGraphicsLayer.clear();
-					watershedGraphicsLayer.add(watershedGraphic);
-					watershedGraphicsLayer.visible = true;
-					//watershedStartDownloadNote.visible = false;
-					//watershedStartDownloadNote.includeInLayout = false;
-					//watershedDownloadNote.visible = true;
-					//watershedDownloadNote.includeInLayout = true;
-					
-					//watershedsHighlight.layerDefinitions = [ "OBJECTID = -1", "OBJECTID = " + resultSet[i].feature.attributes["OBJECTID"] ]
-					
-					//watershedEmailInput.visible = true;
-					//watershedEmailInput.includeInLayout = true;
-					
-					var graphicProvider:ArrayCollection = watershedGraphicsLayer.graphicProvider as ArrayCollection;
-					var graphicsExtent:Extent = GraphicUtil.getGraphicsExtent(graphicProvider.toArray());
-					map.extent = graphicsExtent.expand(2.1);
-				}
 			}
 		}
+		
 	}
 
 	private function hucLinkListener():void {
@@ -870,81 +513,6 @@ import spark.components.Group;
 	
 	/* End geo-coding methods */
 
-	/* Start tools menu methods */
-
-	private function initToolPop():void 
-	{
-		toolMenu = new Menu();
-		/*toolItems = [ 
-			{label: "Measure"},
-			{label: "Download Data by State"},
-			{label: "Download Data in Current Extent", enabled: true, toolTip: "You must be zoomed farther in to extract data"} //,
-		];*/
-		toolItems = [ 
-			{label: "Measure"},
-			{label: "Download Data by State"},
-			{label: "Download Data by Watershed"}
-		];
-		toolMenu.dataProvider = toolItems;
-		toolMenu.addEventListener("itemClick", toolSelection);
-		//toolPop.popUp = toolMenu;
-	}
-	
-	private function toolSelection(event:MenuEvent):void 
-	{
-		var select:String = event.label;
-		if (select == "Measure") {
-			measureToolClose();
-			PopUpManager.removePopUp(_measureWindow);
-			measureLayer.clear();
-			watershedGraphicsLayer.clear();
-			//watershedDownloadForm.visible = false;
-			//watershedsForDownload.visible = false;
-			//watershedsHighlight.visible = false;
-			measureToolActivated = true;
-			_measureWindow = PopUpManager.createPopUp(map, MeasureTool, false) as WiMInfoWindow;
-			_measureWindow.setStyle("skinClass", WiMInfoWindowSkin);
-			_measureWindow.x = (FlexGlobals.topLevelApplication.width/2) - (_measureWindow.width/2);
-			_measureWindow.y = (FlexGlobals.topLevelApplication.height/2) - (_measureWindow.height/2);
-			_measureWindow.addEventListener(CloseEvent.CLOSE, closePopUp);
-		} else if (select == "Download Data by State") {
-			navigateToURL(new URLRequest(resourceManager.getString('urls', 'stateDownloadsUrl')));
-		} else if (select == "Download Data in Current Extent") {
-			if (map.level > 11) {
-				//downloadForm.x = event.target.x;
-				//downloadForm.y = event.target.y + 55;
-				//downloadForm.visible = true;
-				//watershedDownloadForm.visible = false;
-				//watershedsForDownload.visible = false;
-				//watershedsHighlight.visible = false;
-				watershedGraphicsLayer.clear();
-			} else {
-				alert = Alert.show('');
-				Alert.show('You must be zoomed in farther to download by extent', '', 0, map);
-				PopUpManager.removePopUp(alert);
-			}
-		} else if (select == "Download Data by Watershed") {
-			measureToolClose();
-			PopUpManager.removePopUp(_measureWindow);
-			measureLayer.clear();
-			//watershedDownloadForm.x = event.target.x;
-			//watershedDownloadForm.y = event.target.y + 55;
-			
-			//watershedStartDownloadNote.visible = true;
-			//watershedStartDownloadNote.includeInLayout = true;
-			
-			//watershedDownloadNote.visible = false;
-			//watershedDownloadNote.includeInLayout = false;
-			//watershedEmailInput.visible = false;
-			//watershedEmailInput.includeInLayout = false;
-			//watershedDownloadForm.visible = true;
-			//watershedsForDownload.visible = true;
-			//watershedsHighlight.layerDefinitions = [ "OBJECTID = -1", "OBJECTID = -1" ]
-			//watershedsHighlight.visible = true;
-			
-			//downloadForm.visible = false;
-		}
-	}
 
 	private function getURLParameters():Object
 	{
@@ -973,59 +541,9 @@ import spark.components.Group;
 	}
 
 	public function closePopUp(event:CloseEvent):void {
-		if (event.currentTarget is MeasureTool) {
-			measureToolClose();
-			measureLayer.clear();
-			measureToolActivated = false;
-		}
 		PopUpManager.removePopUp(event.currentTarget as WiMInfoWindow);
-		if (event.currentTarget is WetlandDataWindow || event.currentTarget is RiparianDataWindow || event.currentTarget is HistoricDataWindow) {
+		if (event.currentTarget is ProjectWindow) {
 			wetQueryGraphicsLayer.clear();
-		}
-	}
-
-	private function onGeneralizeComp(event:GeometryServiceEvent):void {
-		//var email:String = watershedDownloadEmail.text;
-		
-		var poly:Polygon = new Polygon();
-		poly.rings = event.result[0].rings;
-		poly.spatialReference = map.spatialReference; 
-		var bGraphic:Graphic = new Graphic();
-		bGraphic.geometry = poly;
-		
-		var recordSet:FeatureSet = new FeatureSet();
-		recordSet.features = new Array();
-		recordSet.features[0] = bGraphic;
-		
-		/*var params:Object = {
-			"Area_To_Download":recordSet,
-			"Email_address_to_send_zip_file":email,
-			"Layers_to_Download":""
-		};*/
-		wetlandsDownload.updateDelay = 5000;
-		//wetlandsDownload.submitJob(params, new AsyncResponder(onGPResult,onGPFault));
-		//wetlandsDownload.execute(params, new AsyncResponder(onGPResult,onGPFault));
-		
-		watershedGraphicsLayer.clear();
-		//watershedDownloadForm.visible = false;
-		//watershedStartDownloadNote.visible = true;
-		//watershedStartDownloadNote.includeInLayout = true;
-		//watershedDownloadNote.visible = false;
-		//watershedDownloadNote.includeInLayout = false;
-		//watershedEmailInput.visible = false;
-		//watershedEmailInput.includeInLayout = false;
-		//watershedsForDownload.visible = false;
-		//watershedsHighlight.visible = false;
-		
-		Alert.show('Request sent');
-		
-		function onGPResult():void {
-			Alert.show('Your data request has been completed. Please check your email.');
-		}
-		
-		function onGPFault(info:Object, token:Object = null):void
-		{
-			Alert.show("Error: " + info.toString(), "problem with Data Download");
 		}
 	}
 	
