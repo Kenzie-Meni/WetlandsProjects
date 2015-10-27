@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 07.11.13 - NE - Added swi status query to determine whether wetlands if visible in SWI mapper. -->
+<!-- 02.26.13 - NE - Fixed bug with historic quad query. -->
+<!-- 08.03.11 - NE - Added opacity control to layer query was performed on. -->
+<!-- 07.06.11 - NE - Added zoom to features button in window. -->
+<!-- 07.05.11 - NE - Created. -->
+<controls:WiMInfoWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						xmlns:s="library://ns.adobe.com/flex/spark" 
+						xmlns:mx="library://ns.adobe.com/flex/mx" 
+						xmlns:esri="http://www.esri.com/2008/ags"
+						xmlns:controls="gov.usgs.wim.controls.*"
+						minWidth="250"
+						creationComplete="componentLoad()"
+						title="Wetland Mapping Project">
+	<fx:Style source="assets/styles/main.css"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.esri.ags.FeatureSet;
+			import com.esri.ags.geometry.Extent;
+			import com.esri.ags.geometry.MapPoint;
+			import com.esri.ags.utils.WebMercatorUtil;
+			import com.esri.ags.utils.GraphicUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.CloseEvent;
+			import mx.rpc.AsyncResponder;
+			import mx.utils.ObjectProxy;
+			
+			import skins.OpacityControlSkin;
+			
+			private var finalLat:Number;
+			private var finalLng:Number;
+			
+			protected function componentLoad():void
+			{
+				trace("check out the object");
+			}
+			
+			protected function zoomToFeatures():void {
+				var graphicProvider:ArrayCollection = FlexGlobals.topLevelApplication.wetQueryGraphicsLayer.graphicProvider as ArrayCollection;
+				var graphicsExtent:Extent = GraphicUtil.getGraphicsExtent(graphicProvider.toArray());
+				FlexGlobals.topLevelApplication.map.extent = graphicsExtent.expand(2.1);
+			}
+			
+		]]>
+	</fx:Script>
+	<mx:Box backgroundColor="0xBBBBBB" height="100%" width="100%" color="white">
+		<s:Group>
+			<s:layout>
+				<s:VerticalLayout/>
+			</s:layout>
+			<mx:VBox styleName="poiContain" width="100%" paddingTop="10" paddingBottom="5" paddingLeft="5" paddingRight="5" verticalGap="0">
+				<mx:HBox width="100%" borderColor="white" backgroundColor="black" borderStyle="solid" paddingBottom="5" paddingLeft="5" paddingTop="5" paddingRight="10">
+					<s:Button id="zoomToFeaturesButton" label="Zoom To Project" click="zoomToFeatures()" />
+					<mx:HBox paddingTop="5">
+						<s:Label text="Opacity: " color="white" paddingLeft="10" />
+						<controls:OpacityControl opacityBoxStyleName="opacityBoxTrans" opacityElement="{FlexGlobals.topLevelApplication.activeProjects}" />
+					</mx:HBox>
+				</mx:HBox>
+				<s:HGroup><mx:Text text="Project ID:" fontWeight="bold" /><mx:Text text="{data.PROJECT_ID}" /></s:HGroup>
+				<s:HGroup><mx:Text text="Image Year:" fontWeight="bold" /><mx:Text styleName="{data.IMAGE_YR}" /></s:HGroup>
+				<s:HGroup><mx:Text text="Project Metadata:" fontWeight="bold" /><mx:Text id="metaLink" visible="true" styleName="{(data.SUPPMAPINFO != ('None' || null)) ? 'line' : 'noline'}" text="{(data.SUPPMAPINFO != ('None' || null)) ? 'click here' : 'NONE'}" useHandCursor="true" buttonMode="true" mouseChildren="false" click="(data.SUPPMAPINFO != ('None' || null)) ? navigateToURL(new URLRequest(data.SUPPMAPINFO)) : ''"/></s:HGroup>
+				<s:HGroup width="100%" horizontalAlign="right" paddingTop="30" fontWeight="bold">
+					<s:Label text="Contact " />
+					<s:Label textDecoration="underline" text="Wetlands_Team@fws.gov" useHandCursor="true" mouseChildren="false" buttonMode="true" click="navigateToURL(new URLRequest('mailto:Wetlands_Team@fws.gov'))" />
+					<s:Label text="for more information" />
+				</s:HGroup>
+			</mx:VBox>
+		</s:Group>
+	</mx:Box>
+		
+	
+</controls:WiMInfoWindow>

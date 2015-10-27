@@ -343,9 +343,7 @@
 					</mx:ArrayCollection>
 				</esri:visibleLayers>
 			</esri:ArcGISDynamicMapServiceLayer>
-			<esri:GraphicsLayer id="measureLayer" />
 			<esri:GraphicsLayer id="wetQueryGraphicsLayer" />
-			<esri:GraphicsLayer id="watershedGraphicsLayer" />
 			<esri:GraphicsLayer id="geoCodeGraphicsLayer" />
 			<esri:GraphicsLayer id="wetInfo" />
 		</esri:Map>
