@@ -17,6 +17,7 @@
   <resourceBundle name="urls">
   
   	 <resource name="projectsUrl" value="http://107.20.228.18/arcgis/rest/services/WetlandsProjects/Recent_and_Current_Projects/MapServer"/>
+	 <resource name="imageYearUrl" value="http://107.20.228.18/ArcGIS/rest/services/Data_Source/MapServer"/>
 	 
 	 <resource name="geomServiceUrl" value="http://107.20.228.18/arcgis/rest/services/Utilities/Geometry/GeometryServer"/>
 	 

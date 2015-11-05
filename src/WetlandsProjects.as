@@ -321,14 +321,7 @@ import spark.components.Group;
 
 	private function onExtentChange(event:ExtentEvent):void            
 	{
-		var level:Number = map.level;
-		if (level < 12) {
-			wetQueryGraphicsLayer.clear();
-			PopUpManager.removePopUp(_queryWindow);
-		}
-		trace("level: " + map.level);
-		
-		
+	
 	}
 	
 	//Handles click requests for map layer info
@@ -393,7 +386,13 @@ import spark.components.Group;
 			
 			if (wetGraphic != null) {
 				_queryWindow = PopUpManager.createPopUp(map, ProjectWindow, false) as WiMInfoWindow;
-				_queryWindow.data = resultSet[0].feature.attributes;
+				var dataObj:Object = resultSet[0].feature.attributes;
+				if (resultSet[0].layerName == "Recent Projects") {
+					dataObj.project = "recent";
+				} else if (resultSet[0].layerName == "Active Projects") {
+					dataObj.project = "active";
+				}
+				_queryWindow.data = dataObj;
 				_queryWindow.setStyle("skinClass", FeatureDataWindowSkin);
 				_queryWindow.x = queryX;
 				_queryWindow.y = queryY;
