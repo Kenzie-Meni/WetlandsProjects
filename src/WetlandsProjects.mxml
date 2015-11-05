@@ -322,9 +322,20 @@
 				show="baseSwitch(event)"            
 				url="http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer" />-->
 			<esri:ArcGISDynamicMapServiceLayer
+				id="imageYear"
+				visible="{imageYearToggle.selected}"
+				alpha="0.6"
+				url="{resourceManager.getString('urls', 'imageYearUrl')}" proxyURL="{resourceManager.getString('urls', 'proxyUrl')}">
+				<esri:visibleLayers>                
+					<mx:ArrayCollection id="imageYearVis">                    
+						<fx:Number>3</fx:Number>                
+					</mx:ArrayCollection>            
+				</esri:visibleLayers>
+			</esri:ArcGISDynamicMapServiceLayer>
+			<esri:ArcGISDynamicMapServiceLayer
 				id="recentProjects"
 				visible="{recentProjectsToggle.selected}"
-				alpha="0.6"
+				alpha="0.8"
 				url="{resourceManager.getString('urls', 'projectsUrl')}" proxyURL="{resourceManager.getString('urls', 'proxyUrl')}">
 				<esri:visibleLayers>                
 					<mx:ArrayCollection id="recentProjectsVis">                    
@@ -335,7 +346,7 @@
 			<esri:ArcGISDynamicMapServiceLayer
 				id="activeProjects"
 				visible="{activeProjectsToggle.selected}"
-				alpha="0.7"
+				alpha="1.0"
 				url="{resourceManager.getString('urls', 'projectsUrl')}" proxyURL="{resourceManager.getString('urls', 'proxyUrl')}">
 				<esri:visibleLayers>
 					<mx:ArrayCollection id="activeProjectsVis">
@@ -445,6 +456,7 @@
 						<s:VGroup id="layerToggles" paddingTop="5" paddingLeft="10">
 							<wimControls:LayerToggle id="recentProjectsToggle" adjustOpacity="true" serviceLayerID="recentProjects" layerTitle="Recent Projects" selected="{recentProjects.visible}" />
 							<wimControls:LayerToggle id="activeProjectsToggle" adjustOpacity="true" serviceLayerID="activeProjects" layerTitle="Active Projects" selected="{activeProjects.visible}" />
+							<wimControls:LayerToggle id="imageYearToggle" adjustOpacity="true" serviceLayerID="imageYear" layerTitle="Image Year" selected="{imageYear.visible}" creationComplete="{imageYearToggle.selected = false}"  />
 						</s:VGroup>
 					</s:VGroup>
 				</s:Group>
@@ -452,6 +464,7 @@
 					<s:VGroup paddingTop="5" paddingLeft="5" paddingRight="5" gap="0">
 						<localControls:MapServiceLegend id="recentProjectsLegend" map="{map}" serviceLayer="{recentProjects}" proxyUrl="{resourceManager.getString('urls', 'proxyUrl')}" legendWidth="280" />
 						<localControls:MapServiceLegend id="activeProjectsLegend" map="{map}" serviceLayer="{activeProjects}" proxyUrl="{resourceManager.getString('urls', 'proxyUrl')}" legendWidth="280" />
+						<localControls:MapServiceLegend id="imageYearLegend" map="{map}" serviceLayer="{imageYear}" proxyUrl="{resourceManager.getString('urls', 'proxyUrl')}" legendWidth="280" />
 					</s:VGroup>
 				</mx:Box>
 			</s:VGroup>

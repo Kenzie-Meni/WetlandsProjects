@@ -57,12 +57,12 @@
 					<s:Button id="zoomToFeaturesButton" label="Zoom To Project" click="zoomToFeatures()" />
 					<mx:HBox paddingTop="5">
 						<s:Label text="Opacity: " color="white" paddingLeft="10" />
-						<controls:OpacityControl opacityBoxStyleName="opacityBoxTrans" opacityElement="{FlexGlobals.topLevelApplication.activeProjects}" />
+						<controls:OpacityControl opacityBoxStyleName="opacityBoxTrans" opacityElement="{(data.project == 'recent') ? FlexGlobals.topLevelApplication.recentProjects : FlexGlobals.topLevelApplication.activeProjects}" />
 					</mx:HBox>
 				</mx:HBox>
 				<s:HGroup><mx:Text text="Project ID:" fontWeight="bold" /><mx:Text text="{data.PROJECT_ID}" /></s:HGroup>
-				<s:HGroup><mx:Text text="Image Year:" fontWeight="bold" /><mx:Text styleName="{data.IMAGE_YR}" /></s:HGroup>
-				<s:HGroup><mx:Text text="Project Metadata:" fontWeight="bold" /><mx:Text id="metaLink" visible="true" styleName="{(data.SUPPMAPINFO != ('None' || null)) ? 'line' : 'noline'}" text="{(data.SUPPMAPINFO != ('None' || null)) ? 'click here' : 'NONE'}" useHandCursor="true" buttonMode="true" mouseChildren="false" click="(data.SUPPMAPINFO != ('None' || null)) ? navigateToURL(new URLRequest(data.SUPPMAPINFO)) : ''"/></s:HGroup>
+				<s:HGroup><mx:Text text="Image Year:" fontWeight="bold" /><mx:Text text="{(data.IMAGE_YR != ('Null' || null)) ? data.IMAGE_YR : 'N/A'}" /></s:HGroup>
+				<s:HGroup><mx:Text text="Project Metadata:" fontWeight="bold" /><mx:Text id="metaLink" visible="true" styleName="{(data.SUPPMAPINFO != ('Null' || null)) ? 'line' : 'noline'}" text="{(data.SUPPMAPINFO != ('Null' || null)) ? 'click here' : 'NONE'}" useHandCursor="{(data.SUPPMAPINFO != ('Null' || null)) ? true : false}" buttonMode="{(data.SUPPMAPINFO != ('Null' || null)) ? true : false}" mouseChildren="false" click="(data.SUPPMAPINFO != ('Null' || null)) ? navigateToURL(new URLRequest(data.SUPPMAPINFO)) : ''"/></s:HGroup>
 				<s:HGroup width="100%" horizontalAlign="right" paddingTop="30" fontWeight="bold">
 					<s:Label text="Contact " />
 					<s:Label textDecoration="underline" text="Wetlands_Team@fws.gov" useHandCursor="true" mouseChildren="false" buttonMode="true" click="navigateToURL(new URLRequest('mailto:Wetlands_Team@fws.gov'))" />
