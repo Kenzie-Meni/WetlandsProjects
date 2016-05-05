@@ -413,7 +413,7 @@ import spark.components.Group;
 			trace(event.result.string);
 		}
 		
-		navigateToURL(new URLRequest('http://www.fws.gov/wetlands/downloads/Watershed/HU8_'+HUCNumber+'_watershed.zip'));
+		navigateToURL(new URLRequest('https://www.fws.gov/wetlands/downloads/Watershed/HU8_'+HUCNumber+'_watershed.zip'));
 	}
 	
 	private function infoFault(info:Object, token:Object = null):void

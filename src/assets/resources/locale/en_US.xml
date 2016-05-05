@@ -16,14 +16,14 @@
   <!--  URLs -->
   <resourceBundle name="urls">
   
-  	 <resource name="projectsUrl" value="http://107.20.228.18/arcgis/rest/services/WetlandsProjects/Recent_and_Current_Projects/MapServer"/>
-	 <resource name="imageYearUrl" value="http://107.20.228.18/ArcGIS/rest/services/Data_Source/MapServer"/>
+  	 <resource name="projectsUrl" value="https://fws.wim.usgs.gov/arcgis/rest/services/WetlandsProjects/Recent_and_Current_Projects/MapServer"/>
+	 <resource name="imageYearUrl" value="https://fws.wim.usgs.gov/ArcGIS/rest/services/Data_Source/MapServer"/>
 	 
-	 <resource name="geomServiceUrl" value="http://107.20.228.18/arcgis/rest/services/Utilities/Geometry/GeometryServer"/>
+	 <resource name="geomServiceUrl" value="https://fws.wim.usgs.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer"/>
 	 
 	 <resource name="geocoderUrl" value="http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"/>
 	 
-	 <resource name="proxyUrl" value="http://107.20.228.18/serviceProxy/proxy.ashx" />
+	 <resource name="proxyUrl" value="https://fws.wim.usgs.gov/serviceProxy/proxy.ashx" />
 	 
 	 <resource name="redirectUrl" value="http://www.fws.gov/wetlands/Data/Mapper.html"/>
   </resourceBundle>
@@ -33,7 +33,7 @@
   	<resource name="magnifyingGlass" value="./assets/images/zoom.gif"></resource>
   </resourceBundle>
   
-  <!-- UI text -->
+  <!-- UI text -->	
   <resourceBundle name="ui.text">
     <!-- Application Titles --><resource name="mainTitle" value="U.S. Fish and Wildlife Service"></resource>
   	<resource name="subTitle" value="National Wetlands Inventory"></resource><!--Component Text -->

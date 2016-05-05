@@ -303,7 +303,7 @@
 				</esri:Extent>        
 			</esri:extent>		
 			<esri:ArcGISTiledMapServiceLayer         
-				url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+				url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
 			<!--<esri:ArcGISTiledMapServiceLayer            
 				visible="{baseLayers.selectedLayer == 1}"            
 				show="baseSwitch(event)"            
