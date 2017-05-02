@@ -16,14 +16,14 @@
   <!--  URLs -->
   <resourceBundle name="urls">
   
-  	 <resource name="projectsUrl" value="https://fwspublic.wim.usgs.gov/arcgis/rest/services/WetlandsProjects/Recent_and_Current_Projects/MapServer"/>
-	 <resource name="imageYearUrl" value="https://fwspublic.wim.usgs.gov/ArcGIS/rest/services/Data_Source/MapServer"/>
+  	 <resource name="projectsUrl" value="https://fwsprimary.wim.usgs.gov/server/rest/services/WetlandsProjects/Recent_and_Current_Projects/MapServer"/>
+	 <resource name="imageYearUrl" value="https://fwsprimary.wim.usgs.gov/server/rest/services/Data_Source/MapServer"/>
 	 
-	 <resource name="geomServiceUrl" value="https://fwspublic.wim.usgs.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer"/>
+	 <resource name="geomServiceUrl" value="https://fwsprimary.wim.usgs.gov/server/rest/services/Utilities/Geometry/GeometryServer"/>
 	 
 	 <resource name="geocoderUrl" value="https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"/>
 	 
-	 <resource name="proxyUrl" value="https://fwsmapper.wim.usgs.gov/serviceProxy/proxy.ashx" />
+	 <resource name="proxyUrl" value="https://fwsprimary.wim.usgs.gov/serviceProxy/proxy.ashx" />
 	 
 	 <resource name="redirectUrl" value="https://www.fws.gov/wetlands/Data/Mapper.html"/>
   </resourceBundle>
