@@ -17,7 +17,7 @@
 
     "homepageURL": "https://ccviewer.wim.usgs.gov/WetlandsProjects",
     "downloadURL": "https://github.com/USGS-WiM/WetlandsProjects/archive/master.zip",
-    "disclaimerURL": "https://github.com/USGS-WiM/WetlandsProjects/blob/master/LICENSE.md",
+    "disclaimerURL": "https://github.com/USGS-WiM/WetlandsProjects/blob/master/DISCLAIMER.md",
     "repositoryUrl": "https://github.com/USGS-WiM/WetlandsProjects",
     "vcs": "git",
 
