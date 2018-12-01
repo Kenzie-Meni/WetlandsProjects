@@ -1,6 +1,8 @@
 ![WiM](wimlogo.png)
 
 
+##Update, 2018-12-01: Deprecated ###this repo has been [superceded by the repo wetlands-projects-v2](https://github.com/USGS-WiM/wetland-projects-v2) and is no longer being actively maintained. 
+
 # Wetlands Projects Mapper
 
 The Wetlands Projects Mapper shows recent wetland data additions and active wetland mapping projects.
